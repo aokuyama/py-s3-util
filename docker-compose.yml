@@ -1,0 +1,10 @@
+version: '3'
+services:
+  app:
+    container_name: py_s3_util
+    build:
+      context: .
+    volumes:
+      - ./py_s3_util:/var/task
+    tty: true
+    entrypoint: /bin/sh
