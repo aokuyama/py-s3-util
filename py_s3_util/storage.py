@@ -4,6 +4,7 @@ import shutil
 import tempfile
 import pathlib
 
+
 class AwsS3StorageImplement:
     def __init__(self, logger=None):
         self.logger = logger
@@ -26,11 +27,13 @@ class AwsS3Storage(AwsS3StorageImplement):
 
     def get_resource(self):
         if (not self.resource):
+            import boto3
             self.resource = boto3.resource('s3')
         return self.resource
 
     def get_client(self):
         if (not self.client):
+            import boto3
             self.client = boto3.client('s3')
         return self.client
 
@@ -87,11 +90,15 @@ class AwsS3Storage(AwsS3StorageImplement):
             self.upload_file(str(file), s3)
 
 
+class FakeS3Storage(AwsS3StorageImplement):
+    pass
+
+
 class TestAwsS3Storage(unittest.TestCase):
     def setUp(self):
         self.storage = AwsS3Storage()
 
-    def testディレクトリ名からzipファイル名(self):
+    def testディレクトリ名からzipファイル名生成(self):
         self.assertEqual('hoge.zip', self.storage.get_zip_name('/test/hoge/'))
         self.assertEqual(
             'fuga.zip', self.storage.get_zip_name('/tmp/abc/fuga'))

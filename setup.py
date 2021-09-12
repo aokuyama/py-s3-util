@@ -2,7 +2,7 @@ import setuptools
  
 setuptools.setup(
     name="py_s3_util",
-    version="0.0.0",
+    version="1.0.0",
     author="aokuyama",
     author_email="mail@aokuyama.work",
     description="python aws s3 utils.",
