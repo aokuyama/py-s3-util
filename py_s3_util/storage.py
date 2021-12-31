@@ -47,6 +47,9 @@ class AwsS3Storage(AwsS3StorageImplement):
         return os.path.basename(dir_name + '.zip')
 
     def export_dir(self, local_dir, s3_dir, zip_name=None):
+        if not os.path.isdir(local_dir):
+            self.logger.debug('not exists: ' + local_dir)
+            return
         fp = tempfile.NamedTemporaryFile()
         local_zip_path = fp.name
         if (not zip_name):
@@ -82,6 +85,9 @@ class AwsS3Storage(AwsS3StorageImplement):
         return self.get_bucket().upload_file(local_path, s3_path)
 
     def export_dir_files(self, local_dir, s3_dir):
+        if not os.path.isdir(local_dir):
+            self.logger.debug('not exists: ' + local_dir)
+            return
         p = pathlib.Path(local_dir)
         for file in p.glob("./**/*"):
             if (os.path.isdir(file)):
