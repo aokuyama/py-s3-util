@@ -57,7 +57,9 @@ class AwsS3Storage(AwsS3StorageImplement):
         s3_zip_path = s3_dir + '/' + zip_name
         self.logger.debug('zipping ' + local_dir)
         shutil.make_archive(local_zip_path, 'zip', root_dir=local_dir)
-        return self.upload_file(local_zip_path + '.zip', s3_zip_path)
+        r = self.upload_file(local_zip_path + '.zip', s3_zip_path)
+        self.delete_file(local_zip_path + '.zip')
+        return r
 
     def import_dir(self, local_dir, s3_dir, zip_name=None):
         if (not zip_name):
@@ -83,6 +85,10 @@ class AwsS3Storage(AwsS3StorageImplement):
     def upload_file(self, local_path, s3_path):
         self.logger.debug('upload ' + local_path + ' -> ' + s3_path)
         return self.get_bucket().upload_file(local_path, s3_path)
+
+    def delete_file(self, local_path):
+        self.logger.debug('delete ' + local_path)
+        os.remove(local_path)
 
     def export_dir_files(self, local_dir, s3_dir):
         if not os.path.isdir(local_dir):
